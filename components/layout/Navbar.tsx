@@ -1,8 +1,9 @@
 "use client";
 
-import { Crown, Menu, X } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
+import { GoatMark } from "@/components/shared/GoatMark";
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -22,7 +23,7 @@ export function Navbar() {
           onClick={closeMenu}
         >
           <span className="flex size-10 items-center justify-center rounded-md border border-gold/35 bg-gold/10 text-gold shadow-gold-soft">
-            <Crown aria-hidden="true" className="size-5" />
+            <GoatMark aria-hidden="true" />
           </span>
           <span className="text-sm font-black uppercase tracking-[0.22em] text-ivory">
             GOAT CLUB

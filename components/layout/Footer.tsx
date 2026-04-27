@@ -1,4 +1,4 @@
-import { Crown } from "lucide-react";
+import { GoatMark } from "@/components/shared/GoatMark";
 
 const footerLinks = ["Privacidade", "Termos", "Contato", "Instagram"] as const;
 
@@ -8,7 +8,7 @@ export function Footer() {
       <div className="section-shell flex flex-col gap-8 py-10 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-3">
           <span className="flex size-10 items-center justify-center rounded-md border border-gold/35 bg-gold/10 text-gold">
-            <Crown aria-hidden="true" className="size-5" />
+            <GoatMark aria-hidden="true" />
           </span>
           <div className="flex flex-col gap-1">
             <span className="text-sm font-black uppercase tracking-[0.22em] text-ivory">
