@@ -1,6 +1,12 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { type PointerEvent, useState } from "react";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring
+} from "framer-motion";
 import {
   ArrowRight,
   CalendarCheck2,
@@ -17,22 +23,42 @@ const metricCards = [
   {
     label: "Streak",
     text: "21 dias",
-    icon: Flame
+    eyebrow: "sequência ativa",
+    insight: "+7 dias no mês",
+    rhythm: "aceso",
+    icon: Flame,
+    path: "M6 124 C 48 118, 72 96, 108 94 S 164 114, 198 76 S 262 44, 304 56 S 360 36, 414 20",
+    dot: { cx: 414, cy: 20 }
   },
   {
     label: "Disciplina",
     text: "92%",
-    icon: ShieldCheck
+    eyebrow: "consistência geral",
+    insight: "+18% na semana",
+    rhythm: "alto",
+    icon: ShieldCheck,
+    path: "M6 126 C 50 110, 72 92, 104 98 S 162 126, 198 86 S 260 58, 302 64 S 360 36, 414 18",
+    dot: { cx: 414, cy: 18 }
   },
   {
     label: "Meta semanal",
     text: "5/7 concluídas",
-    icon: CalendarCheck2
+    eyebrow: "execução semanal",
+    insight: "5/7 concluídas",
+    rhythm: "no alvo",
+    icon: CalendarCheck2,
+    path: "M6 130 C 52 120, 72 112, 104 96 S 158 74, 198 82 S 262 62, 306 48 S 366 40, 414 28",
+    dot: { cx: 414, cy: 28 }
   },
   {
     label: "Treino de hoje",
     text: "Peito + Ombro",
-    icon: Dumbbell
+    eyebrow: "treino de hoje",
+    insight: "Peito + Ombro",
+    rhythm: "pronto",
+    icon: Dumbbell,
+    path: "M6 112 C 48 86, 72 70, 110 76 S 164 98, 202 70 S 262 42, 304 46 S 362 24, 414 14",
+    dot: { cx: 414, cy: 14 }
   }
 ] as const;
 
@@ -43,6 +69,40 @@ const proofCards = [
 ] as const;
 
 export function HeroSection() {
+  const [activeMetricIndex, setActiveMetricIndex] = useState(1);
+  const activeMetric = metricCards[activeMetricIndex];
+  const panelRotateX = useSpring(useMotionValue(2), {
+    stiffness: 170,
+    damping: 24
+  });
+  const panelRotateY = useSpring(useMotionValue(-6), {
+    stiffness: 170,
+    damping: 24
+  });
+  const glowX = useMotionValue(72);
+  const glowY = useMotionValue(25);
+  const interactiveGlow = useMotionTemplate`radial-gradient(circle at ${glowX}% ${glowY}%, rgba(212,175,55,0.2), transparent 30%), linear-gradient(135deg, rgba(212,175,55,0.14), transparent 31%, rgba(225,29,46,0.12))`;
+
+  const handlePanelPointerMove = (
+    event: PointerEvent<HTMLDivElement>
+  ) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    const x = (event.clientX - rect.left) / rect.width;
+    const y = (event.clientY - rect.top) / rect.height;
+
+    panelRotateX.set(5 - y * 8);
+    panelRotateY.set(-10 + x * 8);
+    glowX.set(Math.round(x * 100));
+    glowY.set(Math.round(y * 100));
+  };
+
+  const resetPanelTilt = () => {
+    panelRotateX.set(2);
+    panelRotateY.set(-6);
+    glowX.set(72);
+    glowY.set(25);
+  };
+
   return (
     <section
       id="inicio"
@@ -111,11 +171,20 @@ export function HeroSection() {
           <div className="absolute inset-x-2 top-12 -z-10 h-72 rotate-6 rounded-lg bg-neon-red/12 blur-3xl" />
           <div className="absolute -right-5 bottom-8 top-8 hidden w-5 rounded-r-lg border-y border-r border-gold/15 bg-gradient-to-b from-gold/12 via-neon-red/10 to-transparent blur-[0.5px] lg:block lg:[transform:rotateY(-6deg)_translateZ(-18px)]" />
           <div className="absolute inset-x-8 -bottom-5 hidden h-5 rounded-b-lg border-x border-b border-gold/10 bg-black/35 blur-[0.5px] lg:block lg:[transform:rotateX(72deg)_translateZ(-24px)]" />
-          <div
+          <motion.div
             data-hero-panel="true"
+            onPointerLeave={resetPanelTilt}
+            onPointerMove={handlePanelPointerMove}
             className="relative overflow-hidden rounded-lg border border-gold/30 bg-[#080808]/58 p-4 shadow-premium-card backdrop-blur-2xl [box-shadow:0_28px_76px_rgba(0,0,0,0.48),inset_0_0_54px_rgba(212,175,55,0.06)] [transform-style:preserve-3d] sm:p-6 lg:[transform:rotateY(-6deg)_rotateX(2deg)]"
+            style={{
+              rotateX: panelRotateX,
+              rotateY: panelRotateY
+            }}
           >
-            <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(135deg,rgba(212,175,55,0.14),transparent_31%,rgba(225,29,46,0.12))]" />
+            <motion.div
+              className="pointer-events-none absolute inset-0"
+              style={{ background: interactiveGlow }}
+            />
             <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(212,175,55,0.12)_1px,transparent_1px),linear-gradient(90deg,rgba(212,175,55,0.1)_1px,transparent_1px)] [background-size:48px_48px]" />
 
             <div className="relative">
@@ -128,9 +197,18 @@ export function HeroSection() {
                     Painel de Evolução
                   </h2>
                 </div>
-                <div className="flex size-12 items-center justify-center rounded-md border border-neon-red/35 bg-neon-red/10 text-neon-red shadow-red-soft">
+                <button
+                  type="button"
+                  aria-label="Alternar foco do painel de evolução"
+                  onClick={() =>
+                    setActiveMetricIndex(
+                      (current) => (current + 1) % metricCards.length
+                    )
+                  }
+                  className="group flex size-12 items-center justify-center rounded-md border border-neon-red/35 bg-neon-red/10 text-neon-red shadow-red-soft transition duration-300 hover:border-neon-red/70 hover:bg-neon-red/15 focus:outline-none focus:ring-2 focus:ring-neon-red/45"
+                >
                   <Target aria-hidden="true" className="size-5" />
-                </div>
+                </button>
               </div>
 
               <div className="relative mb-4 h-52 overflow-hidden rounded-lg border border-gold/20 bg-black/25 p-4 [box-shadow:0_18px_38px_rgba(0,0,0,0.28),inset_0_0_34px_rgba(212,175,55,0.045)] lg:[transform:translateZ(34px)]">
@@ -140,15 +218,31 @@ export function HeroSection() {
                 <div className="relative z-10 flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs uppercase tracking-[0.2em] text-gold">
-                      evolução semanal
+                      {activeMetric.eyebrow}
                     </p>
-                    <p className="mt-2 text-4xl font-black text-ivory">+18%</p>
+                    <motion.p
+                      key={activeMetric.insight}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.28 }}
+                      className="mt-2 text-4xl font-black text-ivory"
+                    >
+                      {activeMetric.insight}
+                    </motion.p>
                   </div>
                   <div className="rounded-md border border-gold/20 bg-gold/10 px-3 py-2 text-right">
                     <p className="text-xs uppercase tracking-[0.18em] text-gold">
                       ritmo
                     </p>
-                    <p className="mt-1 text-sm font-black text-ivory">alto</p>
+                    <motion.p
+                      key={activeMetric.rhythm}
+                      initial={{ opacity: 0, y: 6 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.24 }}
+                      className="mt-1 text-sm font-black text-ivory"
+                    >
+                      {activeMetric.rhythm}
+                    </motion.p>
                   </div>
                 </div>
 
@@ -157,22 +251,44 @@ export function HeroSection() {
                   className="absolute inset-x-4 bottom-4 h-28 w-[calc(100%-2rem)] overflow-visible"
                   viewBox="0 0 420 150"
                 >
-                  <path
-                    d="M6 126 C 50 110, 72 92, 104 98 S 162 126, 198 86 S 260 58, 302 64 S 360 36, 414 18"
+                  <motion.path
+                    key={`${activeMetric.label}-line-glow`}
+                    d={activeMetric.path}
                     fill="none"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 0.72, ease: "easeOut" }}
                     stroke="rgba(212,175,55,0.95)"
                     strokeLinecap="round"
                     strokeWidth="6"
                   />
-                  <path
-                    d="M6 126 C 50 110, 72 92, 104 98 S 162 126, 198 86 S 260 58, 302 64 S 360 36, 414 18"
+                  <motion.path
+                    key={`${activeMetric.label}-line-soft`}
+                    d={activeMetric.path}
                     fill="none"
+                    initial={{ pathLength: 0, opacity: 0 }}
+                    animate={{ pathLength: 1, opacity: 1 }}
+                    transition={{ duration: 0.72, ease: "easeOut" }}
                     stroke="rgba(212,175,55,0.28)"
                     strokeLinecap="round"
                     strokeWidth="18"
                   />
-                  <circle cx="414" cy="18" fill="#e11d2e" r="7" />
-                  <circle cx="414" cy="18" fill="none" r="16" stroke="#e11d2e" strokeOpacity="0.45" strokeWidth="3" />
+                  <circle
+                    cx={activeMetric.dot.cx}
+                    cy={activeMetric.dot.cy}
+                    fill="#e11d2e"
+                    r="7"
+                  />
+                  <circle
+                    className="animate-soft-pulse"
+                    cx={activeMetric.dot.cx}
+                    cy={activeMetric.dot.cy}
+                    fill="none"
+                    r="16"
+                    stroke="#e11d2e"
+                    strokeOpacity="0.45"
+                    strokeWidth="3"
+                  />
                 </svg>
               </div>
 
@@ -180,14 +296,22 @@ export function HeroSection() {
                 {metricCards.map((metric, index) => {
                   const Icon = metric.icon;
                   return (
-                    <motion.div
+                    <motion.button
+                      type="button"
                       key={metric.label}
-                      className="rounded-lg border border-white/10 bg-white/[0.045] p-4 backdrop-blur-xl [box-shadow:0_14px_28px_rgba(0,0,0,0.18),inset_0_0_24px_rgba(212,175,55,0.035)] lg:[transform:translateZ(18px)]"
-                      animate={{ y: [0, index % 2 === 0 ? -5 : 5, 0] }}
+                      aria-pressed={activeMetricIndex === index}
+                      onClick={() => setActiveMetricIndex(index)}
+                      onFocus={() => setActiveMetricIndex(index)}
+                      onMouseEnter={() => setActiveMetricIndex(index)}
+                      className="group rounded-lg border border-white/10 bg-white/[0.045] p-4 text-left backdrop-blur-xl transition duration-300 [box-shadow:0_14px_28px_rgba(0,0,0,0.18),inset_0_0_24px_rgba(212,175,55,0.035)] hover:border-gold/40 hover:bg-gold/[0.08] focus:outline-none focus:ring-2 focus:ring-gold/40 aria-pressed:border-gold/45 aria-pressed:bg-gold/[0.09] lg:[transform:translateZ(18px)]"
+                      animate={{
+                        y: activeMetricIndex === index ? -3 : 0
+                      }}
+                      whileHover={{ y: -4 }}
+                      whileTap={{ scale: 0.98 }}
                       transition={{
-                        duration: 5.6 + index,
-                        repeat: Infinity,
-                        ease: "easeInOut"
+                        duration: 0.24,
+                        ease: "easeOut"
                       }}
                     >
                       <div className="flex items-center gap-3">
@@ -203,12 +327,12 @@ export function HeroSection() {
                           </p>
                         </div>
                       </div>
-                    </motion.div>
+                    </motion.button>
                   );
                 })}
               </div>
             </div>
-          </div>
+          </motion.div>
         </motion.div>
       </div>
     </section>
