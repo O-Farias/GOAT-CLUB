@@ -109,10 +109,10 @@ export function FeaturesSection() {
   const ActiveIcon = activePillar.icon;
 
   return (
-    <section className="relative overflow-hidden bg-[#050806] py-20 sm:py-28">
-      <div className="absolute inset-x-0 top-0 h-px gold-line" />
-      <div className="absolute inset-0 -z-0 bg-[radial-gradient(ellipse_at_12%_18%,rgba(225,29,46,0.08),transparent_34%),radial-gradient(ellipse_at_78%_18%,rgba(116,138,76,0.18),transparent_36%),linear-gradient(180deg,rgba(6,12,8,0.94)_0%,rgba(4,7,5,1)_58%,rgba(5,5,5,1)_100%)]" />
-      <div className="absolute inset-0 -z-0 opacity-25 [background-image:linear-gradient(rgba(205,220,160,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(205,220,160,0.055)_1px,transparent_1px)] [background-size:56px_56px]" />
+    <section className="relative isolate overflow-hidden bg-black py-20 sm:py-28">
+      <div className="absolute inset-x-0 top-0 z-10 h-px gold-line" />
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 bg-black" />
+      <div aria-hidden="true" className="goat-motion-grid pointer-events-none absolute inset-0 z-0" />
 
       <div className="section-shell relative z-10">
         <div className="grid min-w-0 gap-8 lg:grid-cols-[0.9fr_0.7fr] lg:items-end">
@@ -132,8 +132,8 @@ export function FeaturesSection() {
         </div>
 
         <div className="mt-12 grid gap-5 lg:grid-cols-[1.08fr_0.92fr]">
-          <article className="relative min-w-0 overflow-hidden rounded-lg border border-[#84945d]/30 bg-[#081009]/90 p-5 shadow-premium-card backdrop-blur-xl sm:p-7">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(212,175,55,0.2),transparent_30%),radial-gradient(circle_at_18%_78%,rgba(116,138,76,0.24),transparent_32%)]" />
+          <article className="relative min-w-0 overflow-hidden rounded-lg border border-gold/20 bg-[#050505]/92 p-5 shadow-premium-card backdrop-blur-xl sm:p-7">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_20%,rgba(212,175,55,0.16),transparent_30%),radial-gradient(circle_at_18%_78%,rgba(225,29,46,0.08),transparent_32%)]" />
             <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(245,240,230,0.075)_1px,transparent_1px),linear-gradient(90deg,rgba(245,240,230,0.055)_1px,transparent_1px)] [background-size:42px_42px]" />
 
             <div className="relative z-10 flex flex-col gap-7">
@@ -157,7 +157,7 @@ export function FeaturesSection() {
 
               <div className="grid gap-4 sm:grid-cols-[0.8fr_1fr]">
                 <div className="rounded-lg border border-white/10 bg-black/24 p-5">
-                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b6c486]">
+                  <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold/80">
                     Foco da semana
                   </p>
                   <p className="mt-3 text-xl font-black leading-8 text-ivory">
@@ -168,7 +168,7 @@ export function FeaturesSection() {
                 <div className="rounded-lg border border-white/10 bg-black/24 p-5">
                   <div className="flex items-center justify-between gap-4">
                     <div>
-                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#b6c486]">
+                      <p className="text-xs font-bold uppercase tracking-[0.2em] text-gold/80">
                         Ritmo
                       </p>
                       <p className="mt-2 text-2xl font-black text-ivory">
@@ -187,7 +187,7 @@ export function FeaturesSection() {
 
                   <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-[#87965c] via-gold to-[#f1d774] transition-[width] duration-500"
+                      className="h-full rounded-full bg-gradient-to-r from-neon-red via-gold to-[#f1d774] transition-[width] duration-500"
                       style={{ width: `${activePillar.progress}%` }}
                     />
                   </div>
@@ -227,19 +227,19 @@ export function FeaturesSection() {
                   onFocus={() => setActivePillarIndex(index)}
                   onMouseEnter={() => setActivePillarIndex(index)}
                   className={cn(
-                    "group relative min-h-40 overflow-hidden rounded-lg border border-white/10 bg-white/[0.035] p-5 text-left shadow-premium-card backdrop-blur-xl transition duration-300 hover:border-gold/40 hover:bg-[#87965c]/10 focus:outline-none focus:ring-2 focus:ring-gold/40",
+                    "group relative min-h-40 overflow-hidden rounded-lg border border-white/10 bg-white/[0.035] p-5 text-left shadow-premium-card backdrop-blur-xl transition duration-300 hover:border-gold/40 hover:bg-gold/[0.07] focus:outline-none focus:ring-2 focus:ring-gold/40",
                     isActive &&
-                      "border-gold/45 bg-[#87965c]/12 [box-shadow:0_24px_70px_rgba(0,0,0,0.36),inset_0_0_42px_rgba(212,175,55,0.08)]"
+                      "border-gold/45 bg-gold/[0.08] [box-shadow:0_24px_70px_rgba(0,0,0,0.36),inset_0_0_42px_rgba(212,175,55,0.08)]"
                   )}
                 >
-                  <div className="absolute -right-14 -top-12 h-28 w-48 rotate-12 bg-[#87965c]/12 blur-3xl transition duration-300 group-hover:bg-gold/14" />
+                  <div className="absolute -right-14 -top-12 h-28 w-48 rotate-12 bg-gold/[0.07] blur-3xl transition duration-300 group-hover:bg-gold/14" />
                   <div className="relative z-10 flex h-full flex-col justify-between gap-6">
                     <div className="flex items-start justify-between gap-4">
                       <div>
                         <p className="text-xs font-bold uppercase tracking-[0.22em] text-gold">
                           Pilar {pillar.label}
                         </p>
-                        <p className="mt-2 text-sm font-bold text-[#b8c39a]">
+                        <p className="mt-2 text-sm font-bold text-ivory/70">
                           {pillar.short}
                         </p>
                       </div>
@@ -264,7 +264,7 @@ export function FeaturesSection() {
                               "block h-full rounded-full transition-all duration-500",
                               isActive
                                 ? "w-full bg-gold"
-                                : "w-1/3 bg-[#87965c]/70"
+                                : "w-1/3 bg-gold/35"
                             )}
                           />
                         </span>
