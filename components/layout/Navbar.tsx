@@ -1,9 +1,9 @@
 "use client";
 
 import { Menu, X } from "lucide-react";
+import Image from "next/image";
 import { useState } from "react";
 
-import { GoatMark } from "@/components/shared/GoatMark";
 import { Button } from "@/components/ui/button";
 import { navLinks } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -22,8 +22,15 @@ export function Navbar() {
           className="flex items-center gap-3"
           onClick={closeMenu}
         >
-          <span className="flex size-10 items-center justify-center rounded-md border border-gold/35 bg-gold/10 text-gold shadow-gold-soft">
-            <GoatMark aria-hidden="true" />
+          <span className="relative flex size-11 items-center justify-center">
+            <Image
+              src="/goat-logo-1.png"
+              alt=""
+              fill
+              sizes="44px"
+              className="object-contain"
+              priority
+            />
           </span>
           <span className="text-sm font-black uppercase tracking-[0.22em] text-ivory">
             GOAT CLUB
